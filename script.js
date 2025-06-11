@@ -62,38 +62,22 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// === Testimonial Slider ===
-document.addEventListener("DOMContentLoaded", () => {
-  const testimonials = document.querySelectorAll(".testimonial");
-  const container = document.getElementById("testimonials");
+// Testimonials Carousel Script
+document.addEventListener("DOMContentLoaded", function () {
+  const slides = document.querySelectorAll('.testimonial.image-slide');
+  const dotsContainer = document.querySelector('.testimonial-dots');
 
-  const dotWrapper = document.createElement("div");
-  dotWrapper.className = "testimonial-dots";
-  container.appendChild(dotWrapper);
-
-  testimonials.forEach((_, index) => {
-    const dot = document.createElement("button");
-    dot.setAttribute("data-index", index);
-    dot.addEventListener("click", () => {
-      show(index);
-      clearInterval(autoPlay);
+  slides.forEach((_, index) => {
+    const dot = document.createElement('button');
+    dot.addEventListener('click', () => {
+      slides.forEach(s => s.classList.remove('active'));
+      dotsContainer.querySelectorAll('button').forEach(d => d.classList.remove('active'));
+      slides[index].classList.add('active');
+      dot.classList.add('active');
     });
-    dotWrapper.appendChild(dot);
+    if (index === 0) dot.classList.add('active');
+    dotsContainer.appendChild(dot);
   });
-
-  const dots = dotWrapper.querySelectorAll("button");
-  let current = 0;
-
-  function show(index) {
-    testimonials.forEach(t => t.classList.remove("active"));
-    dots.forEach(d => d.classList.remove("active"));
-    testimonials[index].classList.add("active");
-    dots[index].classList.add("active");
-    current = index;
-  }
-
-  const autoPlay = setInterval(() => show((current + 1) % testimonials.length), 6000);
-  show(0);
 });
 
 // === Form Validation ===
@@ -113,54 +97,5 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("מספר טלפון לא תקין.");
       e.preventDefault();
     }
-  });
-});
-
-// === Countdown Shadowbox ===
-document.addEventListener("DOMContentLoaded", () => {
-  const countdownBox = document.getElementById("countdown-box");
-  const countdownSpan = document.getElementById("countdown");
-  const closeBtn = document.getElementById("close-countdown");
-
-  function getTimeRemaining(endDate) {
-    const t = Date.parse(endDate) - Date.now();
-    const seconds = Math.floor((t / 1000) % 60);
-    const minutes = Math.floor((t / 1000 / 60) % 60);
-    const hours = Math.floor((t / 1000 / 60 / 60) % 24);
-    const days = Math.floor(t / (1000 * 60 * 60 * 24));
-    return { total: t, days, hours, minutes, seconds };
-  }
-
-  function updateCountdown(endDate) {
-    const { total, days, hours, minutes, seconds } = getTimeRemaining(endDate);
-    countdownSpan.innerHTML = `${days} ימים, ${hours} שעות, ${minutes} דקות, ${seconds} שניות`;
-    if (total <= 0) {
-      clearInterval(interval);
-      countdownSpan.innerHTML = "הסתיים!";
-    }
-  }
-
-  const endTime = new Date();
-  endTime.setDate(endTime.getDate() + 2);
-  const interval = setInterval(() => updateCountdown(endTime), 1000);
-
-  // Show box when user scrolls near bottom
-  let ticking = false;
-  window.addEventListener("scroll", () => {
-    if (!ticking) {
-      window.requestAnimationFrame(() => {
-        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-        if (window.scrollY > scrollable - 100) {
-          countdownBox.classList.add("visible");
-        }
-        ticking = false;
-      });
-      ticking = true;
-    }
-  });
-
-  // Close button
-  closeBtn?.addEventListener("click", () => {
-    countdownBox.classList.remove("visible");
   });
 });
