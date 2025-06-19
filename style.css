@@ -664,13 +664,13 @@ img {
   justify-content: center;
   align-items: center;
   margin-top: 20px;
-  gap: 12px;
+  gap: 10px;
 }
 
 .testimonial-dots button {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%; /* Circle */
   background-color: #A9B5A1;
   border: none;
   cursor: pointer;
@@ -679,12 +679,12 @@ img {
 
 .testimonial-dots button:hover {
   background-color: #DA6A00;
-  transform: scale(1.15);
+  transform: scale(1.2);
 }
 
 .testimonial-dots button.active {
   background-color: #DA6A00;
-  box-shadow: 0 0 10px rgba(218, 106, 0, 0.4);
+  box-shadow: 0 0 6px rgba(218, 106, 0, 0.3);
 }
 
 /* Desktop only – smaller image */
@@ -694,22 +694,68 @@ img {
   }
 }
 
-/* Responsive */
+/* === Responsive Mobile Styles === */
 @media (max-width: 768px) {
   #testimonials {
-    padding: 70px 16px;
+    padding: 60px 16px;
   }
 
   #testimonials h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
+    line-height: 1.4;
+    margin-bottom: 36px;
   }
 
   .testimonial.image-slide {
-    max-width: 90%;
+    max-width: 100%;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+
+  .testimonial.image-slide img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+
+  /* 2 Rows × 4 Columns of Circle Dots */
+  .testimonial-dots {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    justify-items: center;
+    align-items: center;
+    margin-top: 16px;
+    padding: 0 10px;
+  }
+
+  .testimonial-dots button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #A9B5A1;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .testimonial-dots button.active {
+    background-color: #DA6A00;
+    box-shadow: 0 0 6px rgba(218, 106, 0, 0.4);
+  }
+
+  .pulse-cta,
+  #testimonials .cta-btn {
+    font-size: 1rem;
+    padding: 12px 20px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 320px;
+    margin: 24px auto 0;
+    display: block;
   }
 }
 
-  
 
 /* === WHO IS IT FOR SECTION === */
 #audience {
