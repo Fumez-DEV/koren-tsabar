@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // === Smooth Scroll for Anchor Links ===
+  // === Smooth Anchor Scroll ===
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', e => {
       const target = document.querySelector(anchor.getAttribute('href'));
@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // === Intersection Observer Utilities ===
-  function revealOnIntersect(selector, className = 'visible', threshold = 0.5) {
+  // === Intersection Observer Reveal ===
+  const revealOnIntersect = (selector, className = 'visible', threshold = 0.5) => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -19,30 +19,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     }, { threshold });
-
     document.querySelectorAll(selector).forEach(el => observer.observe(el));
-  }
+  };
 
   revealOnIntersect("#challenge", "visible", 0.4);
   revealOnIntersect("#audience li");
 
-  // === Final CTA Observer & Title Change ===
+  // === Final CTA Title Switch ===
   const finalCta = document.querySelector("#final-cta");
   const pulseBtn = finalCta?.querySelector(".pulse-cta");
   if (finalCta && pulseBtn) {
     const titleObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          finalCta.classList.add("visible");
-          pulseBtn.classList.add("pulse-cta");
-          document.title = "⏱️ אל תפספס את ההזדמנות!";
-        } else {
-          const resetTitle = () => document.title = "מכושר לקרבי – קורן צבר";
-          'requestIdleCallback' in window ? requestIdleCallback(resetTitle) : setTimeout(resetTitle, 500);
-        }
+        document.title = entry.isIntersecting
+          ? "⏱️ אל תפספס את ההזדמנות!"
+          : "מכושר לקרבי – קורן צבר";
       });
     }, { threshold: 0.6 });
-
     titleObserver.observe(finalCta);
   }
 
@@ -50,9 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".faq-item").forEach(item => {
     const question = item.querySelector(".faq-question");
     question.addEventListener("click", () => {
-      document.querySelectorAll(".faq-item").forEach(i => {
-        if (i !== item) i.classList.remove("active");
-      });
+      document.querySelectorAll(".faq-item").forEach(i => i !== item && i.classList.remove("active"));
       item.classList.toggle("active");
     });
   });
@@ -60,8 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // === Testimonials Carousel (Images + Videos) ===
   const slides = document.querySelectorAll(".testimonial.image-slide");
   const dotsContainer = document.querySelector(".testimonial-dots");
+  let currentIndex = 0;
 
-  if (dotsContainer.children.length === 0) {
+  if (slides.length && dotsContainer && !dotsContainer.children.length) {
     slides.forEach((_, i) => {
       const dot = document.createElement("button");
       dot.addEventListener("click", () => showSlide(i));
@@ -69,36 +61,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const dots = dotsContainer.querySelectorAll("button");
-  let currentIndex = 0;
-  if (dots.length > 0) dots[0].classList.add("active");
+  const dots = dotsContainer?.querySelectorAll("button") || [];
+  if (dots[0]) dots[0].classList.add("active");
 
-  function showSlide(index) {
-    slides.forEach((slide, i) => {
-      slide.classList.toggle("active", i === index);
-    });
+  const showSlide = (index) => {
+    slides.forEach((s, i) => s.classList.toggle("active", i === index));
+    dots.forEach((d, i) => d.classList.toggle("active", i === index));
 
-    dots.forEach((dot, i) => {
-      dot.classList.toggle("active", i === index);
-    });
-
-    // Pause all videos when switching
     document.querySelectorAll("#testimonials video").forEach(video => {
       video.pause();
       video.currentTime = 0;
     });
 
     currentIndex = index;
-  }
+  };
 
-  // === Form Validation ===
+  // === Form Validation
   const form = document.querySelector('form[name="challenge-form"]');
   if (form) {
     form.addEventListener("submit", e => {
       const { name, phone, age, status } = form;
       const phoneRegex = /^[0-9]{9,10}$/;
 
-      if (!name.value.trim() || !phone.value.trim() || !age.value || !status.value) {
+      if (!name.value.trim() || !phone.value.trim() || !age.value || (status && !status.value)) {
         alert("אנא מלא את כל השדות לפני ההרשמה.");
         e.preventDefault();
         return;
@@ -111,14 +96,51 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // === Auto-play video in #video section on scroll ===
+// === Formspree AJAX + Success Message ===
+const fsForm = document.getElementById("challenge-form");
+const successMsg = document.getElementById("success-message");
+
+if (fsForm && successMsg) {
+  fsForm.addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const formData = new FormData(fsForm);
+    const endpoint = "https://formspree.io/f/mldnwndk";
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: formData
+      });
+
+      if (response.ok) {
+        fsForm.reset();
+        successMsg.style.display = "block";
+
+        // Auto-hide after 6 seconds
+        setTimeout(() => {
+          successMsg.style.display = "none";
+        }, 6000);
+      } else {
+        alert("אירעה שגיאה בעת השליחה. נסה שוב.");
+      }
+    } catch (err) {
+      alert("שגיאת רשת. נסה שוב מאוחר יותר.");
+    }
+  });
+}
+
+
+  // === Auto-play video in #video section on scroll
   const videoSection = document.querySelector("#video");
   const embeddedVideo = videoSection?.querySelector("video");
+
   if (videoSection && embeddedVideo) {
     const videoObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting && embeddedVideo.paused) {
-          embeddedVideo.play().catch(() => { /* Auto-play blocked by browser */ });
+          embeddedVideo.play().catch(() => {}); // Autoplay fallback
         }
       });
     }, { threshold: 0.6 });

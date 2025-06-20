@@ -112,23 +112,31 @@
 </section>
 
 
-  <section id="form" data-aos="fade-up">
-    <div class="container">
-      <h2>הצטרף עכשיו לאתגר</h2>
-      <form name="challenge-form" method="POST" data-netlify="true">
-        <label>שם מלא
-          <input type="text" name="name" autocomplete="name" required>
-        </label>
-        <label>טלפון
-          <input type="tel" name="phone" autocomplete="tel" required>
-        </label>
-        <label>גיל
-          <input type="number" name="age" autocomplete="bday-year" required>
-        </label>
-        <button type="submit">אני בפנים!</button>
-      </form>
+<section id="form" data-aos="fade-up">
+  <div class="container">
+    <h2>הצטרף עכשיו לאתגר</h2>
+
+    <!-- Success Message -->
+    <div id="success-message" class="success-message">
+      ✅ ההרשמה בוצעה בהצלחה!
     </div>
-  </section>
+
+    <form id="challenge-form" name="challenge-form" method="POST">
+      <label>שם מלא
+        <input type="text" name="name" autocomplete="name" required>
+      </label>
+      <label>טלפון
+        <input type="tel" name="phone" autocomplete="tel" required>
+      </label>
+      <label>גיל
+        <input type="number" name="age" autocomplete="bday-year" required>
+      </label>
+      <button type="submit">אני בפנים!</button>
+    </form>
+  </div>
+</section>
+
+
   
 
 <!-- 6. Testimonials as Images Carousel -->
