@@ -223,7 +223,7 @@ img {
 }
 
 
-/* === VIDEO SECTION === */
+/* === Proof/Video Section === */
 #video {
   background: linear-gradient(to bottom, #E6ECE1 0%, #C8D4C2 100%);
   color: #1A1A1A;
@@ -247,7 +247,9 @@ img {
   line-height: 1.4;
   direction: rtl;
   position: relative;
-  white-space: nowrap;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
 }
 
 #video h2::after {
@@ -271,23 +273,41 @@ img {
   margin-right: auto;
 }
 
-/* === Video Wrapper === */
-.video-wrapper {
-  max-width: 740px;
+/* === Framer-style Proof Stack === */
+.framer-stack {
+  position: relative;
+  width: 320px;
+  height: 440px;
   margin: 0 auto 48px;
-  border-radius: 16px;
-  overflow: hidden;
-  aspect-ratio: 9 / 16;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  background-color: #000;
 }
 
-.video-wrapper video {
+.framer-photo {
+  position: absolute;
   width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 16px;
+  height: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.15);
+  transition: transform 0.4s ease;
+}
+
+.framer-photo img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
+  border-radius: inherit;
+}
+
+/* Individual rotated layers */
+.photo-1 { transform: rotate(5deg) scale(0.97); z-index: 1; }
+.photo-2 { transform: rotate(-6deg) scale(0.97); z-index: 2; }
+.photo-3 { transform: rotate(9deg); z-index: 3; }
+.photo-4 { transform: none; z-index: 4; }
+
+/* Hover effect (optional) */
+.framer-photo:hover {
+  transform: scale(1.02) rotate(0deg);
+  z-index: 5;
 }
 
 /* === CTA Button === */
@@ -318,7 +338,7 @@ img {
   100% { box-shadow: 0 0 0 0 rgba(218, 106, 0, 0); }
 }
 
-/* === Improved Mobile Responsive === */
+/* === Responsive === */
 @media (max-width: 768px) {
   #video {
     padding: 60px 12px;
@@ -340,32 +360,14 @@ img {
     padding: 0 6px;
   }
 
-  .video-wrapper {
-    position: relative;
-    width: 100%;
-    padding-bottom: 177.77%; /* 16:9 */
-    height: 0;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    margin-bottom: 24px;
-  }
-
-  .video-wrapper video {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-    border-radius: 16px;
-    object-fit: cover;
+  .framer-stack {
+    width: 260px;
+    height: 370px;
   }
 
   #video .cta-btn {
     font-size: 1rem;
     padding: 14px 26px;
-    display: inline-block;
     margin-top: 12px;
   }
 }
