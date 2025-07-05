@@ -148,3 +148,27 @@ if (fsForm && successMsg) {
     videoObserver.observe(videoSection);
   }
 });
+
+  const photos = document.querySelectorAll("#rotatingStack .framer-photo");
+  let current = 0;
+
+  function updateClasses() {
+    photos.forEach((photo, i) => {
+      photo.classList.remove("active", "prev", "next");
+      if (i === current) {
+        photo.classList.add("active");
+      } else if (i === (current - 1 + photos.length) % photos.length) {
+        photo.classList.add("prev");
+      } else if (i === (current + 1) % photos.length) {
+        photo.classList.add("next");
+      }
+    });
+  }
+
+  function rotateStack() {
+    current = (current + 1) % photos.length;
+    updateClasses();
+  }
+
+  updateClasses(); // Initial
+  setInterval(rotateStack, 4000); // Rotate every 4 seconds

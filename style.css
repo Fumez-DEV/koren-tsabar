@@ -223,7 +223,7 @@ img {
 }
 
 
-/* === Proof/Video Section === */
+/* === Proof Section Styling === */
 #video {
   background: linear-gradient(to bottom, #E6ECE1 0%, #C8D4C2 100%);
   color: #1A1A1A;
@@ -273,12 +273,13 @@ img {
   margin-right: auto;
 }
 
-/* === Framer-style Proof Stack === */
+/* === Framer-style Proof Stack (Auto Rotate) === */
 .framer-stack {
   position: relative;
   width: 320px;
   height: 440px;
   margin: 0 auto 48px;
+  perspective: 1000px;
 }
 
 .framer-photo {
@@ -287,8 +288,10 @@ img {
   height: 100%;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.15);
-  transition: transform 0.4s ease;
+  opacity: 0;
+  transform: scale(0.96) rotate(0deg) translateY(0);
+  transition: all 0.8s ease;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
 }
 
 .framer-photo img {
@@ -298,16 +301,23 @@ img {
   border-radius: inherit;
 }
 
-/* Individual rotated layers */
-.photo-1 { transform: rotate(5deg) scale(0.97); z-index: 1; }
-.photo-2 { transform: rotate(-6deg) scale(0.97); z-index: 2; }
-.photo-3 { transform: rotate(9deg); z-index: 3; }
-.photo-4 { transform: none; z-index: 4; }
-
-/* Hover effect (optional) */
-.framer-photo:hover {
-  transform: scale(1.02) rotate(0deg);
+/* Active & Neighboring States */
+.framer-photo.active {
+  opacity: 1;
+  transform: scale(1.02) rotate(0deg) translateY(0);
   z-index: 5;
+}
+
+.framer-photo.prev {
+  opacity: 0.6;
+  transform: scale(0.96) rotate(-6deg) translateY(-12px);
+  z-index: 3;
+}
+
+.framer-photo.next {
+  opacity: 0.6;
+  transform: scale(0.96) rotate(6deg) translateY(12px);
+  z-index: 2;
 }
 
 /* === CTA Button === */
@@ -331,7 +341,7 @@ img {
   box-shadow: 0 12px 32px rgba(126, 217, 87, 0.3);
 }
 
-/* Pulse animation */
+/* === CTA Pulse Animation === */
 @keyframes pulseGlow {
   0% { box-shadow: 0 0 0 0 rgba(218, 106, 0, 0.4); }
   70% { box-shadow: 0 0 0 20px rgba(218, 106, 0, 0); }
@@ -346,11 +356,7 @@ img {
 
   #video h2 {
     font-size: 1.9rem;
-    line-height: 1.4;
     margin-bottom: 16px;
-    white-space: normal;
-    word-break: break-word;
-    text-align: center;
   }
 
   #video p {
@@ -371,6 +377,7 @@ img {
     margin-top: 12px;
   }
 }
+
 
   
 /* === FAIL REASONS SECTION === */
